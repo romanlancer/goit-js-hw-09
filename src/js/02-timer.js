@@ -9,7 +9,7 @@ const minutesEl = document.querySelector('span[data-minutes]');
 const secondsEl = document.querySelector('span[data-seconds]');
 const myInput = document.querySelector('#datetime-picker');
 let intervalId = null;
-let selectedTime = null;
+// let selectedTime = null;
 const options = {
   altInput: true,
   altFormat: 'F j, Y (h:S K)',
@@ -24,16 +24,17 @@ const options = {
       Notiflix.Notify.failure('wrong date bro');
     } else {
       Notiflix.Notify.success('go ahead bro');
-      selectedTime = selectedDates[0].getTime();
+      // selectedTime = selectedDates[0].getTime();
     }
   },
 };
 
-flatpickr(myInput, options);
+const fp = flatpickr(myInput, options);
 
 startButton.addEventListener('click', Start);
 
 function Start() {
+  const selectedTime = fp.selectedDates[0].getTime();
   intervalId = setInterval(() => {
     const currentTime = Date.now();
     const deltaTime = selectedTime - currentTime;
