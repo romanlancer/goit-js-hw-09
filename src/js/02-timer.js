@@ -2,14 +2,13 @@ import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 import Notiflix from 'notiflix';
 require('flatpickr/dist/themes/material_blue.css');
+
 const startButton = document.querySelector('button[data-start]');
 const daysEl = document.querySelector('span[data-days]');
 const hoursEl = document.querySelector('span[data-hours]');
 const minutesEl = document.querySelector('span[data-minutes]');
 const secondsEl = document.querySelector('span[data-seconds]');
-const myInput = document.querySelector('#datetime-picker');
-let intervalId = null;
-// let selectedTime = null;
+
 const options = {
   altInput: true,
   altFormat: 'F j, Y (h:S K)',
@@ -18,60 +17,70 @@ const options = {
   time_24hr: true,
   defaultDate: new Date(),
   minuteIncrement: 1,
-  onClose(selectedDates, dateStr, instance) {
+  onClose(selectedDates) {
     if (selectedDates[0] <= options.defaultDate) {
       startButton.setAttribute('disabled', true);
       Notiflix.Notify.failure('wrong date bro');
     } else {
       Notiflix.Notify.success('go ahead bro');
-      // selectedTime = selectedDates[0].getTime();
     }
   },
 };
+const fp = flatpickr('#datetime-picker', options);
 
-const fp = flatpickr(myInput, options);
+class Timer {
+  constructor({ onStart }) {
+    this.selectedTime = null;
+    this.intervalId = null;
+    this.onStart = onStart;
+    this.isActive = true;
+  }
+  Start() {
+    if (fp.selectedDates[0]) {
+      clearInterval(this.intervalId);
+    }
 
-startButton.addEventListener('click', Start);
+    this.selectedTime = fp.selectedDates[0].getTime();
 
-function Start() {
-  const selectedTime = fp.selectedDates[0].getTime();
-  intervalId = setInterval(() => {
-    const currentTime = Date.now();
-    const deltaTime = selectedTime - currentTime;
-    const convertedTime = convertMs(deltaTime);
-    clockInterface(convertedTime);
-  }, 1000);
+    this.intervalId = setInterval(() => {
+      const currentTime = Date.now();
+      const deltaTime = this.selectedTime - currentTime;
+      const convertedTime = this.convertMs(deltaTime);
+      this.onStart(convertedTime);
+    }, 1000);
+  }
+
+  addLeadingZero(value) {
+    return String(value).padStart(2, '0');
+  }
+
+  convertMs(ms) {
+    // Number of milliseconds per unit of time
+    const second = 1000;
+    const minute = second * 60;
+    const hour = minute * 60;
+    const day = hour * 24;
+    // Remaining days
+    const days = this.addLeadingZero(Math.floor(ms / day));
+    // Remaining hours
+    const hours = this.addLeadingZero(Math.floor((ms % day) / hour));
+    // Remaining minutes
+    const minutes = this.addLeadingZero(Math.floor(((ms % day) % hour) / minute));
+    // Remaining seconds
+    const seconds = this.addLeadingZero(Math.floor((((ms % day) % hour) % minute) / second));
+    return { days, hours, minutes, seconds };
+  }
 }
 
-function clockInterface({ days, hours, minutes, seconds }) {
+const timer = new Timer({
+  onStart: updateClockInterface,
+});
+
+startButton.addEventListener('click', timer.Start.bind(timer));
+
+function updateClockInterface({ days, hours, minutes, seconds }) {
   daysEl.textContent = `${days}`;
   hoursEl.textContent = `${hours}`;
   minutesEl.textContent = `${minutes}`;
   secondsEl.textContent = `${seconds}`;
 }
-
-function addLeadingZero(value) {
-  return String(value).padStart(2, '0');
-}
-
-function convertMs(ms) {
-  // Number of milliseconds per unit of time
-  const second = 1000;
-  const minute = second * 60;
-  const hour = minute * 60;
-  const day = hour * 24;
-  // Remaining days
-  const days = addLeadingZero(Math.floor(ms / day));
-  // Remaining hours
-  const hours = addLeadingZero(Math.floor((ms % day) / hour));
-  // Remaining minutes
-  const minutes = addLeadingZero(Math.floor(((ms % day) % hour) / minute));
-  // Remaining seconds
-  const seconds = addLeadingZero(Math.floor((((ms % day) % hour) % minute) / second));
-
-  return { days, hours, minutes, seconds };
-}
-
-console.log(convertMs(2000)); // {days: 0, hours: 0, minutes: 0, seconds: 2}
-console.log(convertMs(140000)); // {days: 0, hours: 0, minutes: 2, seconds: 20}
-console.log(convertMs(24140000)); // {days: 0, hours: 6 minutes: 42, seconds: 20}
