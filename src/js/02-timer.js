@@ -3,11 +3,17 @@ import 'flatpickr/dist/flatpickr.min.css';
 import Notiflix from 'notiflix';
 require('flatpickr/dist/themes/material_blue.css');
 
-const startButton = document.querySelector('button[data-start]');
-const daysEl = document.querySelector('span[data-days]');
-const hoursEl = document.querySelector('span[data-hours]');
-const minutesEl = document.querySelector('span[data-minutes]');
-const secondsEl = document.querySelector('span[data-seconds]');
+const clearButton = document.createElement('button');
+clearButton.classList.add('reset');
+clearButton.textContent = 'Reset';
+document.body.append(clearButton);
+
+const startButton = document.querySelector('[data-start]');
+const resetButton = document.querySelector('.reset');
+const daysEl = document.querySelector('[data-days]');
+const hoursEl = document.querySelector('[data-hours]');
+const minutesEl = document.querySelector('[data-minutes]');
+const secondsEl = document.querySelector('[data-seconds]');
 
 const options = {
   altInput: true,
@@ -22,6 +28,7 @@ const options = {
       startButton.setAttribute('disabled', true);
       Notiflix.Notify.failure('wrong date bro');
     } else {
+      startButton.removeAttribute('disabled');
       Notiflix.Notify.success('go ahead bro');
     }
   },
@@ -33,14 +40,14 @@ class Timer {
     this.selectedTime = null;
     this.intervalId = null;
     this.onStart = onStart;
-    this.isActive = true;
+    startButton.setAttribute('disabled', true);
   }
-  Start() {
-    if (fp.selectedDates[0]) {
+  start() {
+    this.selectedTime = fp.selectedDates[0].getTime();
+
+    if (this.selectedTime) {
       clearInterval(this.intervalId);
     }
-
-    this.selectedTime = fp.selectedDates[0].getTime();
 
     this.intervalId = setInterval(() => {
       const currentTime = Date.now();
@@ -52,6 +59,14 @@ class Timer {
 
   addLeadingZero(value) {
     return String(value).padStart(2, '0');
+  }
+
+  reset() {
+    clearInterval(this.intervalId);
+    daysEl.textContent = '';
+    hoursEl.textContent = '';
+    minutesEl.textContent = '';
+    secondsEl.textContent = '';
   }
 
   convertMs(ms) {
@@ -76,7 +91,8 @@ const timer = new Timer({
   onStart: updateClockInterface,
 });
 
-startButton.addEventListener('click', timer.Start.bind(timer));
+startButton.addEventListener('click', timer.start.bind(timer));
+resetButton.addEventListener('click', timer.reset.bind(timer));
 
 function updateClockInterface({ days, hours, minutes, seconds }) {
   daysEl.textContent = `${days}`;

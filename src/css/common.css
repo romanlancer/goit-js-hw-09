@@ -10,6 +10,7 @@ body {
   background-color: #fafafa;
   color: #212121;
   line-height: 1.5;
+  position: relative;
 }
 
 img {
@@ -35,7 +36,7 @@ img {
 button {
   cursor: pointer;
   position: relative;
-  top: 0;
+
   cursor: pointer;
   font-weight: 500;
   font-size: 16px;
@@ -45,29 +46,28 @@ button {
   background: #f5f4fa;
   padding: 6px 22px;
   transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1),
-    color 250ms cubic-bezier(0.4, 0, 0.2, 1), box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1),
-    top 250ms cubic-bezier(0.4, 0, 0.2, 1);
+    color 250ms cubic-bezier(0.4, 0, 0.2, 1), box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-button:hover,
-button:focus {
-  top: 2px;
-  color: #ffffff;
-  background-color: #2196f3;
-  box-shadow: 0px 3px 1px rgba(0, 0, 0, 0.1), 0px 1px 2px rgba(0, 0, 0, 0.08),
-    0px 2px 2px rgba(0, 0, 0, 0.12);
-}
 button:active {
   box-shadow: inset 0px 3px 1px rgba(0, 0, 0, 0.1), inset 0px 1px 2px rgba(0, 0, 0, 0.08),
     inset 0px 2px 2px rgba(0, 0, 0, 0.12);
 }
-
 button[data-start] {
-  background-color: #85c462;
 }
 
-button[data-stop] {
+button[data-start]:hover {
+  color: #ffffff;
+  background-color: #85c462;
+  box-shadow: 0px 3px 1px rgba(0, 0, 0, 0.1), 0px 1px 2px rgba(0, 0, 0, 0.08),
+    0px 2px 2px rgba(0, 0, 0, 0.12);
+}
+
+button[data-stop]:hover {
+  color: #ffffff;
   background-color: #e3513d;
+  box-shadow: 0px 3px 1px rgba(0, 0, 0, 0.1), 0px 1px 2px rgba(0, 0, 0, 0.08),
+    0px 2px 2px rgba(0, 0, 0, 0.12);
 }
 
 input {
@@ -87,4 +87,38 @@ input#datetime-picker {
 
 .form input {
   width: 150px;
+}
+
+.reset {
+  position: absolute;
+  top: 43px;
+  left: 340px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 1.63;
+  color: black;
+  border-radius: 4px;
+  background: #f5f4fa;
+  padding: 6px 22px;
+  transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1),
+    color 250ms cubic-bezier(0.4, 0, 0.2, 1), box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+.reset:hover {
+  color: #ffffff;
+  background-color: #2196f3;
+  box-shadow: 0px 3px 1px rgba(0, 0, 0, 0.1), 0px 1px 2px rgba(0, 0, 0, 0.08),
+    0px 2px 2px rgba(0, 0, 0, 0.12);
+}
+
+.color-switcher__start {
+  position: absolute;
+  top: 350px;
+  left: 42%;
+}
+
+.color-switcher__stop {
+  position: absolute;
+  top: 350px;
+  left: 50%;
 }
