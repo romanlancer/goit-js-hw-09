@@ -1,10 +1,11 @@
 const form = document.querySelector('.form');
-// form.addEventListener('submit', createPromise);
+
 form.addEventListener('submit', definePromise);
+
 let positionInputValue = null;
 let delayInputValue = null;
 let firstDelayInputValue = null;
-let finalValue = null;
+
 function definePromise(e) {
   e.preventDefault();
 
@@ -14,36 +15,40 @@ function definePromise(e) {
   positionInputValue = Number(amount.value);
   delayInputValue = Number(step.value);
   firstDelayInputValue = Number(delay.value);
-  finalValue = Number(firstDelayInputValue) + Number(delayInputValue);
-  console.log(finalValue);
-  // console.log(`Login: ${step.value}, Password: ${amount.value}`);
-  // pos = value;
-  // am = value1;
-  // console.log(pos);
-  // console.log(am);
+
+  generatePromises(positionInputValue);
+
   e.target.reset();
 
-  createPromise()
-    .then(({ position, delay }) => {
-      console.log(`✅ Fulfilled promise ${position} in ${delay}ms`);
-    })
-    .catch(({ position, delay }) => {
-      console.log(`❌ Rejected promise ${position} in ${delay}ms`);
-    });
-
-  createPromise(delayInputValue);
-}
-
-function createPromise(position, delay, delayInputValue) {
-  const shouldResolve = Math.random() > 0.3;
-  const promise = new Promise((resolve, reject) => {
-    setTimeout(() => {
-      if (shouldResolve) {
-        resolve({ position: positionInputValue, delay: finalValue });
-      } else {
-        reject({ position: positionInputValue, delay: finalValue });
-      }
-    }, delayInputValue);
-  });
-  console.log(promise);
+  function generatePromises(positionInputValue) {
+    for (let i = 0; i < positionInputValue; i++) {
+      createPromise()
+        .then(({ position, delay }) => {
+          console.log(`✅ Fulfilled promise ${position} in ${delay}ms`);
+        })
+        .catch(({ position, delay }) => {
+          console.log(`❌ Rejected promise ${position} in ${delay}ms`);
+        });
+    }
+    let init = null;
+    firstDelayInputValue = Number(delay.value);
+    function createPromise() {
+      const shouldResolve = Math.random() > 0.3;
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          if (shouldResolve) {
+            resolve({
+              position: (init += 1),
+              delay: (firstDelayInputValue += delayInputValue),
+            });
+          } else {
+            reject({
+              position: (init += 1),
+              delay: (firstDelayInputValue += delayInputValue),
+            });
+          }
+        }, (firstDelayInputValue += delayInputValue));
+      });
+    }
+  }
 }
