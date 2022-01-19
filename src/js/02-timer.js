@@ -3,6 +3,11 @@ import 'flatpickr/dist/flatpickr.min.css';
 import Notiflix from 'notiflix';
 require('flatpickr/dist/themes/material_blue.css');
 
+Notiflix.Notify.init({
+  fontSize: '20px',
+  position: 'center-top',
+});
+
 const clearButton = document.createElement('button');
 clearButton.classList.add('reset');
 clearButton.textContent = 'Reset';

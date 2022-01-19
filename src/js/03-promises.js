@@ -1,3 +1,11 @@
+import Notiflix from 'notiflix';
+
+Notiflix.Notify.init({
+  position: 'center-center',
+  width: '400px',
+  fontSize: '18px',
+});
+
 const form = document.querySelector('.form');
 
 form.addEventListener('submit', definePromise);
@@ -32,10 +40,10 @@ function definePromise(e) {
       // delayTime += firstDelayInputValue
       createPromise(position, firstDelayInputValue)
         .then(({ position, delayTime }) => {
-          console.log(`✅ Fulfilled promise ${position} in ${delayTime}ms`);
+          Notiflix.Notify.success(`✅ Fulfilled promise ${position} in ${delayTime}ms`);
         })
         .catch(({ position, delayTime }) => {
-          console.log(`❌ Rejected promise ${position} in ${delayTime}ms`);
+          Notiflix.Notify.failure(`❌ Rejected promise ${position} in ${delayTime}ms`);
         });
 
       function createPromise(position, delayTime) {
