@@ -50,13 +50,14 @@ class Timer {
   start() {
     this.selectedTime = fp.selectedDates[0].getTime();
 
-    if (this.selectedTime) {
-      clearInterval(this.intervalId);
-    }
-
     this.intervalId = setInterval(() => {
-      const currentTime = Date.now();
-      const deltaTime = this.selectedTime - currentTime;
+      const deltaTime = this.selectedTime - Date.now();
+
+      if (deltaTime < 0) {
+        clearInterval(this.intervalId);
+        return;
+      }
+
       const convertedTime = this.convertMs(deltaTime);
       this.onStart(convertedTime);
     }, 1000);
@@ -68,6 +69,7 @@ class Timer {
 
   reset() {
     clearInterval(this.intervalId);
+    fp.selectedDates = defaultDate;
     daysEl.textContent = '';
     hoursEl.textContent = '';
     minutesEl.textContent = '';
