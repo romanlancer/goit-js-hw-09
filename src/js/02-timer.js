@@ -69,7 +69,7 @@ class Timer {
 
   reset() {
     clearInterval(this.intervalId);
-    fp.selectedDates = defaultDate;
+    fp.setDate(new Date());
     daysEl.textContent = '';
     hoursEl.textContent = '';
     minutesEl.textContent = '';
