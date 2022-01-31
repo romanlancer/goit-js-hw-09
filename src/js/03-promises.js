@@ -37,7 +37,7 @@ function definePromise(e) {
       }
 
       position += 1;
-      // delayTime += firstDelayInputValue
+
       createPromise(position, firstDelayInputValue)
         .then(({ position, delayTime }) => {
           Notiflix.Notify.success(`✅ Fulfilled promise ${position} in ${delayTime}ms`);
