@@ -19,6 +19,8 @@ const daysEl = document.querySelector('[data-days]');
 const hoursEl = document.querySelector('[data-hours]');
 const minutesEl = document.querySelector('[data-minutes]');
 const secondsEl = document.querySelector('[data-seconds]');
+startButton.setAttribute('disabled', true);
+resetButton.setAttribute('disabled', true);
 
 const options = {
   enableTime: true,
@@ -28,9 +30,11 @@ const options = {
   onClose(selectedDates) {
     if (selectedDates[0] <= options.defaultDate) {
       startButton.setAttribute('disabled', true);
+      resetButton.setAttribute('disabled', true);
       Notiflix.Notify.failure('wrong date bro');
     } else {
       startButton.removeAttribute('disabled');
+      resetButton.removeAttribute('disabled');
       Notiflix.Notify.success('go ahead bro');
     }
   },
@@ -44,9 +48,6 @@ class Timer {
     this.onStart = onStart;
   }
   start() {
-    if (this.selectedTime) {
-      startButton.setAttribute('disabled', true);
-    }
     clearInterval(this.intervalId);
     this.selectedTime = fp.selectedDates[0].getTime();
 
@@ -61,6 +62,10 @@ class Timer {
       const convertedTime = this.convertMs(deltaTime);
       this.onStart(convertedTime);
     }, 1000);
+
+    if (this.selectedTime) {
+      startButton.setAttribute('disabled', true);
+    }
   }
 
   addLeadingZero(value) {
@@ -69,8 +74,11 @@ class Timer {
 
   reset() {
     clearInterval(this.intervalId);
-
     fp.setDate(Date.now());
+    if (!this.start()) {
+      resetButton.setAttribute('disabled', true);
+    }
+
     daysEl.textContent = '';
     hoursEl.textContent = '';
     minutesEl.textContent = '';
