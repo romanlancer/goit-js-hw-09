@@ -21,9 +21,6 @@ const minutesEl = document.querySelector('[data-minutes]');
 const secondsEl = document.querySelector('[data-seconds]');
 
 const options = {
-  altInput: true,
-  altFormat: 'F j, Y (h:S K)',
-  dateFormat: 'Y-m-d H:i',
   enableTime: true,
   time_24hr: true,
   defaultDate: new Date(),
@@ -73,7 +70,7 @@ class Timer {
   reset() {
     clearInterval(this.intervalId);
 
-    fp.setDate(new Date());
+    fp.setDate(Date.now());
     daysEl.textContent = '';
     hoursEl.textContent = '';
     minutesEl.textContent = '';

@@ -91,6 +91,8 @@ input {
 }
 input#datetime-picker {
   margin-right: 50px;
+  font-style: italic;
+  font-size: 18px;
 }
 
 .form input {
@@ -106,8 +108,8 @@ input#datetime-picker {
 }
 .reset {
   position: absolute;
-  top: 43px;
-  left: 340px;
+  top: 44px;
+  left: 400px;
   cursor: pointer;
   font-weight: 500;
   font-size: 16px;
