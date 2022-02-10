@@ -45,9 +45,12 @@ class Timer {
     this.selectedTime = null;
     this.intervalId = null;
     this.onStart = onStart;
-    startButton.setAttribute('disabled', true);
   }
   start() {
+    if (this.selectedTime) {
+      startButton.setAttribute('disabled', true);
+    }
+    clearInterval(this.intervalId);
     this.selectedTime = fp.selectedDates[0].getTime();
 
     this.intervalId = setInterval(() => {
@@ -69,6 +72,7 @@ class Timer {
 
   reset() {
     clearInterval(this.intervalId);
+
     fp.setDate(new Date());
     daysEl.textContent = '';
     hoursEl.textContent = '';
