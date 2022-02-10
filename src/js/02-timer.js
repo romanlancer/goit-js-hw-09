@@ -75,14 +75,12 @@ class Timer {
   reset() {
     clearInterval(this.intervalId);
     fp.setDate(Date.now());
+
     if (!this.start()) {
       resetButton.setAttribute('disabled', true);
     }
 
-    daysEl.textContent = '';
-    hoursEl.textContent = '';
-    minutesEl.textContent = '';
-    secondsEl.textContent = '';
+    this.onStart(this.convertMs(0));
   }
 
   convertMs(ms) {
